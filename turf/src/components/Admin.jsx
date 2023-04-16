@@ -34,10 +34,13 @@ const Admin = () => {
 
   const handleChange = (e)=>{
     setformData({...formData, [e.target.name]: e.target.value})
+
+
+    
   }
   return (
     <div style={{display:'flex',alignItems:'center',justifyContent:'center', margin:'40px 0' }}>
-    <div style={{border:'none', padding:'20px 30px', borderRadius:'34px', boxShadow:'3px 5px 15px gray '}}>
+    <div style={{border:'none', padding:'20px 30px', borderRadius:'34px', boxShadow:'3px 5px 15px gray'}}>
       <form onSubmit={handleSubmit} className='form'>
 
         <Avatar className='avatar'>

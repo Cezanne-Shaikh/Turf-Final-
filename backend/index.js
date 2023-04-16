@@ -30,45 +30,11 @@ app.use('/profile', profileRoutes)
 app.use('/corporate-booking', corporateRoutes)
 app.use("/api/payment/", paymentRoutes);
 
-app.post('/create-checkout-session', async (req, res) => {
-    const { price, date, from, to } = req.body;
 
-    console.log('ppprrricceeee',price)
-    const priceInRupee = price * 100;
-  
-// const bookingDetails = {
-//     bookingDate: date,
-//     from: from,
-//     to: to
-//   };
-
-    const session = await stripe.checkout.sessions.create({
-      
-      line_items: [
-        {
-          // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-          price_data:{
-            currency: 'inr',
-            product_data: {
-              name: "Go-Turf",
-              
-            },
-            unit_amount: priceInRupee
-          },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      success_url: `${`http://localhost:${PORT}`}`,
-      cancel_url: `${`http://localhost:${PORT}`}`,
-    });
-  
-    res.send({url: session.url});
-  });
 
 const PORT = process.env.PORT || 4001
 
-const CONNECTION_URL = 'mongodb://vegeta0616:mudassir020616@ac-apjwdak-shard-00-00.fbbk4lp.mongodb.net:27017,ac-apjwdak-shard-00-01.fbbk4lp.mongodb.net:27017,ac-apjwdak-shard-00-02.fbbk4lp.mongodb.net:27017/?ssl=true&replicaSet=atlas-hhxvf2-shard-0&authSource=admin&retryWrites=true&w=majority'
+const CONNECTION_URL = 'mongodb+srv://cezanne:251436@cluster0.zrik7m6.mongodb.net/?retryWrites=true&w=majority'
 
 app.listen(PORT, ()=> console.log(`http://localhost:${PORT}`))
 

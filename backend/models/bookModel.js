@@ -3,19 +3,19 @@ import mongoose from "mongoose";
 const bookSchema = mongoose.Schema({
     name:{
         type: String,
-        required: true
+        // required: true
     },
     email:{
         type: String,
-        required: true
+        // required: true
     },
     number:{
         type: Number,
-        required: true
+        // required: true
     },
     address:{
         type: String,
-        required: true
+        // required: true
     },
     sportType:{
         type: String
@@ -25,7 +25,7 @@ const bookSchema = mongoose.Schema({
     },
     date:{
       type: Date,
-      required: true
+      // required: true
     },
     from:{
       type: String,
@@ -36,6 +36,9 @@ const bookSchema = mongoose.Schema({
       required: true
     },
     price:{
+      type: String
+    },
+    turfName: {
       type: String
     }
 })

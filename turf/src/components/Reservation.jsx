@@ -27,6 +27,7 @@ const Reservation = () => {
         { title: "Email", field: "email", },
         { title: "Address", field: "address"},
         { title: "Sport", field: 'sportType' },
+        { title: "Turf", field: 'turfName' },
         { title: "Players", field: "players" },
         { title: "Date", field: 'date' },
         { title: "From", field: "from" },
@@ -38,6 +39,7 @@ const Reservation = () => {
         { title: "Enquirer", field: "enquirer", },
         { title: "Email", field: "email", },
         { title: "Sport", field: 'sportsType' },
+        { title: "Turf", field: 'turf' },   
         { title: "Phone", field: 'number' },
         { title: "Players", field: "players" },
         { title: "Date", field: 'date' },
@@ -79,12 +81,23 @@ const Reservation = () => {
         await axios.delete(`${url}/${id}`)
         data.splice(index, 1)
         setdata([...data])
+        // window.location.reload()
+        toast("Booking has been canceled!", {
+            type:'success',
+            position:'bottom-right'
+          })
     }
 
     const handleDeleteCorporate = async(id, index)=>{
         await axios.delete(`http://localhost:4001/corporate-booking/${id}`)
         corporateData.splice(index, 1)
         setCorporateData([...corporateData])
+        // window.location.reload()
+        toast("Booking has been canceled!", {
+            type:'success',
+            position:'bottom-right'
+          })
+
     }
     
     const downloadPdf = () => {
@@ -195,7 +208,7 @@ const Reservation = () => {
                 <th>Email</th>
                 <th>Address</th>
                 <th>Sport</th>
-                <th>Phone</th>
+                <th style={{textAlign:'center'}}>Turf</th>
                 <th style={{textAlign:'center'}}>Date</th>
                 <th>From</th>
                 <th>To</th>
@@ -208,7 +221,7 @@ const Reservation = () => {
                     <td>{booking.email}</td>
                     <td>{booking.address}</td>
                     <td>{booking.sportType}</td>
-                    <td style={{textAlign:'center'}}>{booking.number.toString().substring(0, 10)}</td>
+                    <td style={{textAlign:'center', textTransform:'capitalize'}}>{booking.turfName}</td>
                     <td style={{width:'90px', textAlign:'center'}}>{moment(booking.date).format('DD MMM')}</td>
                     <td>{booking.from}</td>
                     <td>{booking.to}</td>
@@ -226,6 +239,7 @@ const Reservation = () => {
                 <th>Email</th>
            
                 <th>Sport</th>
+                <th style={{textAlign:'center'}}>Turf</th>
                 <th style={{textAlign:'center'}}>Phone</th>
                 <th style={{textAlign:'center'}}>Date</th>
                 <th style={{textAlign:'center'}}>Players</th>
@@ -239,7 +253,8 @@ const Reservation = () => {
                     <td style={{textTransform:'capitalize'}}>{booking.enquirer}</td>
                     <td>{booking.email}</td>
                     <td>{booking.sportsType}</td>
-                    <td style={{textAlign:'center'}}>{booking.number.toString().substring(0, 10)}</td>
+                    <td style={{textAlign:'center', textTransform:'capitalize'}}>{booking.turf}</td>
+                    <td style={{textAlign:'center'}}>{booking?.number?.toString().substring(0, 10)}</td>
                     <td style={{width:'90px', textAlign:'center'}}>{moment(booking.date).format('DD MMM')}</td>
                     <td style={{textAlign:'center'}}>{booking.players}</td>
                     <td>{booking.from}</td>

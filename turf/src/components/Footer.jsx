@@ -1,5 +1,5 @@
 import React from 'react'
-import Logo from '../images/playspots.png'
+import Logo from '../images/GoTurf.png'
 import insta from '../images/instagram.png'
 import facebook from '../images/facebook.png'
 import linkedin from '../images/linkedin.png'
@@ -25,7 +25,7 @@ const Footer = () => {
       <div className='divider'></div>
       <div style={{ width:'180px'}}>
         <ul style={{listStyle:'none', lineHeight:'25px', cursor:'pointer'}}>
-          <Link to='/Faqs' style={{textDecoration:'none',color:'whitesmoke'}}><li>FAQ's</li></Link>
+          <Link to='/faq' style={{textDecoration:'none',color:'whitesmoke'}}><li>FAQ's</li></Link>
           <Link to={'/sitemap'}style={{textDecoration:'none',color:'whitesmoke'}}><li>Site Map</li></Link>
           <Link to={'/terms'}style={{textDecoration:'none',color:'whitesmoke'}}><li>Terms & Conditions</li></Link>
         </ul>

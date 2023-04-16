@@ -72,13 +72,13 @@ const Regsiter = () => {
           </>
         )}<br/>
         <TextField label='@gmail.com' name='email' onChange={handleChange} required fullWidth/>&nbsp;
-        {isLogin && <TextField label='+ 91' name='number' InputProps={{
+        {isLogin && <TextField label='+ 91' name='number' required InputProps={{
           inputProps: {
           maxLength: 10,
           },
         }} onChange={handleChange} fullWidth/>}<br />
         <TextField label='Password' type='password' name='password' onChange={handleChange} required fullWidth/><br />
-        {!isLogin && <Link to={'/reset'} style={{textDecoration:'none'}}><span style={{color:'#347C98'}}> Forgot Password ? </span></Link>}
+        {/* {!isLogin && <Link to={'/reset'} style={{textDecoration:'none'}}><span style={{color:'#347C98'}}> Forgot Password ? </span></Link>} */}
         {isLogin && (
         <TextField label='Confirm Password' name='cPassword' type='password' onChange={handleChange} required fullWidth/>
         )}<br/>

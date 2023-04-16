@@ -25,7 +25,7 @@ router.post('/signIn', async(req,res)=>{
 
         const token = jwt.sign({email: signedUser.email, id: signedUser._id}, 'turf', {expiresIn:'3min'})
 
-        res.status(200).json({admin:true, id: signedUser._id, email: signedUser.email, phone: signedUser.phone, name: signedUser.name, userImg: signedUser.userImg, token})
+        res.status(200).json({admin:true, id: signedUser._id, email: signedUser.email, number: signedUser.phone, name: signedUser.name, userImg: signedUser.userImg, token})
 
         
     } catch (error) {
@@ -38,11 +38,13 @@ router.patch('/:id', async(req,res)=>{
     const id  = req.params.id;
     const body = req.body
 
-    const update = await Admin.findByIdAndUpdate(id, body, {new: true})
     try { 
-        res.send(update)
+    const update = await Admin.findByIdAndUpdate(id, body, {new: true})
+    const response = { id: update.id, ...update._doc };
+    res.send(response)
+    
     } catch (error) {
-        console.log(error)
+      res.send(error)
     }
 })
     
@@ -90,7 +92,7 @@ router.patch('/:id', async(req,res)=>{
 
             await  transporter.sendMail({
                 to: req.body.email,
-                from:'mudassirshaikh6432@gmail.com',
+                from:'cezanneshaikh50@gmail.com',
                 subject:'Please verify your Otp',
                 html: `<h1>Your Otp is ${otpData?.code}</h1>`
             })

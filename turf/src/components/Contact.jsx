@@ -11,7 +11,7 @@ const Contact = () => {
   const userData = JSON.parse(localStorage.getItem('userProfile'))
   const firstName = userData?.name.split(' ')[0]
   const lastName = userData?.name.split(' ')[1]
-  const initialState = { firstName, lastName, email: userData?.email, number: userData?.phone, query:''}
+  const initialState = { firstName, lastName, email: userData?.email, number: userData?.number, query:''}
   const [contact, setContact] = useState(initialState)
 
   const handleContact = (e)=>{

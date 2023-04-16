@@ -2,26 +2,48 @@ import { Button,InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import axios from 'axios'
 import React,{useEffect, useState} from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import football from '../images/football.webp'
+import football from '../images/GoTurf.png'
 import turf1 from '../images/turf1.jpg'
 import turf2 from '../images/turf2.jpg'
 import turf3 from '../images/turf3.jpg'
 import turf4 from '../images/turf4.jpg'
 import turf5 from '../images/turf5.jpg'
+import playTurf from '../images/playTurf.jpg'
+import FSTurf from '../images/FSTurf.jpg'
+import greenField from '../images/greenField.jpg'
+import turfPark from '../images/Turf-Park.png'
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import { toast, ToastContainer } from 'react-toastify'
 import moment from 'moment'
-import GooglePayButton from '@google-pay/button-react'
-
+// grennField
+import gf1 from '../images/gf1.jpg'
+import gf2 from '../images/gf2.jpg'
+import gf3 from '../images/gf3.jpg'
+import gf4 from '../images/gf4.jpeg'
+import gf5 from '../images/gf5.webp'
+// FSTURF
+import fs1 from '../images/fs1.jpeg'
+import fs2 from '../images/fs2.jpeg'
+import fs3 from '../images/fs3.jpeg'
+import fs4 from '../images/fs4.jpeg'
+import fs5 from '../images/fs5.jpeg'
+// platTurf
+import pt1 from '../images/pt1.jpg'
+import pt2 from '../images/pt2.jpg'
+import pt3 from '../images/pt3.jpg'
+import pt4 from '../images/pt4.jpg'
+import pt5 from '../images/pt5.jpg'
 
 const Book = () => {
   const user = JSON.parse(localStorage.getItem('userProfile'))
-  const [bookingData, setBookingData] = useState({ name: user?.name, email: user?.email, number: user?.phone, players: null, address:'', sportType:'', date: new Date(), from:'', to:'', price: ''})
+  const [selectedTurf, setSelectedTurf] = useState('');
+  const [bookingData, setBookingData] = useState({ name: user?.name, email: user?.email, number: user?.number, players: null, address:'', sportType:'', date: new Date(), from:'', to:'', price: '', turfName:''})
   const [img, setImg] = useState(football)
   const [isCorprateActive, setisCorprateActive] = useState(false)
   const [isIndividualActive, setisIndividualActive] = useState(false)
   const [bookingPrice, setBookingPrice] = useState('0')
-  const [corporateBooking, setCorporateBooking] = useState({ purpose:'', date:new Date(), from:'', to:'', enquirer: user?.name, email: user?.email, players: null, number: user?.phone, company:'', sportsType:'', price: '' })
+  const [corporateBooking, setCorporateBooking] = useState({ purpose:'', date:new Date(), from:'', to:'', enquirer: user?.name, email: user?.email, players: null, number: user?.number, company:'', sportsType:'', price: '',turf: '' })
   const [individualPrice, setIndividualPrice] = useState('0')
 
   const images = [
@@ -31,8 +53,37 @@ const Book = () => {
     turf4,
     turf5
   ]
+  const GreenFieldimages = [
+   gf1,
+   gf2,
+   gf3,
+   gf4,
+   gf5
+
+  ]
+  const FsTurfimages = [
+    fs1,
+    fs2,
+    fs3,
+    fs4,
+    fs5
+  ]
+  const Ptimages = [
+    pt1,
+    pt2,
+    pt3,
+    pt4,
+    pt5
+  ]
+  
+ 
 
   const amenities = [ 'Goalposts', 'Bat', 'Tennis Ball', 'Football', 'Flood Lights', 'Changing Room', 'Washroom']
+  const GreenFiledamenities = [ 'Floodlights', 'Bat', 'Balls', 'Football', 'Stumps', 'Goalposts', 'Washroom']
+  const FsTurfamenities = [ 'Packaged Water', 'Floodlight', 'Seating Area', 'Football', 'Goalposts', 'Washroom']
+  const Ptamenities = [ 'Packaged Water', 'Goalposts', 'Seating Area','Washroom']
+
+
 
   const sportsType = [ 'Football', 'Cricket' ];
 
@@ -45,7 +96,7 @@ const Book = () => {
   let sec = currTime.getSeconds()
   
   currTime = `${hh} : ${min} : ${sec}`
-  // console.log('timmmeeeeeeee',currTime)
+  
 
   let currdate = new Date();
   
@@ -54,11 +105,11 @@ const Book = () => {
   let yr = currdate.getFullYear()
   
   currdate = `${yr}-${mnth}1-${dd}`
-  // console.log('Daattttteeeeeeee',currdate)
+ 
 
   const handleClear = ()=>{
-    setBookingData({ name: user?.name, email: user?.email, number: user?.phone, address:'', players: 0, sportsType:'', date:'', from:'', to:'', price: 0})
-    setCorporateBooking({ purpose:'', date:'', from:'', to:'', enquirer: user?.name, email: user?.email, number: user?.phone, company:'', players:0, sportsType:'', price: 0 })
+    setBookingData({ name: user?.name, email: user?.email, number: user?.number, address:'', players: 0, sportsType:'', turfName: selectedTurf, date:'', from:'', to:'', price: 0})
+    setCorporateBooking({ purpose:'', date:'', from:'', to:'', enquirer: user?.name, email: user?.email, number: user?.number, company:'', players:0, sportsType:'', price: 0, turf: selectedTurf })
   }
 
   const handleChange =(e)=>{
@@ -67,7 +118,7 @@ const Book = () => {
 
   useEffect(() => {
     const hoursDifference = bookingData?.to.split(':')[0] - bookingData?.from.split(':')[0];
-    console.log(hoursDifference)
+    
     if (hoursDifference === 1) {
       setIndividualPrice('1800');
     } else if (hoursDifference === 2) {
@@ -97,8 +148,6 @@ const Book = () => {
     setBookingData(prev => ({ ...prev, price: individualPrice }));
   }, [individualPrice]);
 
-  console.log('bkkkkkkkkkkkkk',corporateBooking)
-
   const handleSubmit = async(e) =>{
     // e.preventDefault()
     try {
@@ -122,7 +171,7 @@ const Book = () => {
   }
 
   const fetchCorporate = async()=>{
-    const res = await axios.get('http://localhost:4001/corporate-booking')
+    await axios.get('http://localhost:4001/corporate-booking')
   }
 
   useEffect(()=> {
@@ -140,7 +189,6 @@ const Book = () => {
     setisCorprateActive(false)
     handleClear()
   }
-  
   
   const handleChangeCorprate = (e)=>{ 
     setCorporateBooking({...corporateBooking, [e.target.name]: e.target.value})
@@ -191,15 +239,10 @@ const Book = () => {
   }
 
   const handleCorporateSubmit = async(e)=>{
-    // e.preventDefault()
+    
     try {
-  
       const postData = await axios.post(`http://localhost:4001/corporate-booking`, corporateBooking)
-    //   console.log('pooostttttt',postData)
-    //   toast(`You are Booked for ${moment(corporateBooking.date).format('DD MMM')}`, {
-    //     type:'success',
-    //     position:'bottom-right'
-    // })
+    
       handleClear()
       history.push('/dashboard')
 
@@ -210,27 +253,6 @@ const Book = () => {
     })
     }
   } 
-
-  // const handleCorporateSubmit = (e)=>{
-  //   e.preventDefault()
-  //   try {
-  
-  //     axios.post(`http://localhost:4001/create-checkout-session`, corporateBooking).then((res) => {
-  //       if(res.data.url){
-  //         window.location.href = res.data.url
-  //       }
-  //     }).catch(err => console.log(err))
-      
-  //   } catch (error) {
-  //     toast(`${error?.response?.data?.message}`, {
-  //       type:'error',
-  //       position:'bottom-right'
-  //   })
-  //   }
-  // } 
-
-  // key_id: 'rzp_test_x5TxpJ4BAs6JsK',
-  // key_secret: 'GnlVYMovZYvrmA2HdglloMpn',
   const initPayment = (data) => {
 		const options = {
 			key: "rzp_test_x5TxpJ4BAs6JsK",
@@ -261,38 +283,131 @@ const Book = () => {
 		rzp1.open();
 	};
 
+  
+
   const handlePayment = async (e) => {
     e.preventDefault()
 		try {
       if(isCorprateActive){
+        try {
+          const postData = await axios.post(`http://localhost:4001/corporate-booking/verify`, corporateBooking)
+          if(postData){
+            const orderUrl = "http://localhost:4001/api/payment/orders";
+            const { data } = await axios.post(orderUrl, { amount: corporateBooking.price });
+            console.log('razorpay',data);
+            initPayment(data.data);
+          }
+        } catch (error) {
+          console.log(error)
+          toast(`${error?.response?.data?.message}`, {
+            type:'error',
+            position:'bottom-right'
+        })
+        }
 
-        const orderUrl = "http://localhost:4001/api/payment/orders";
-        const { data } = await axios.post(orderUrl, { amount: corporateBooking.price });
-        console.log('razorpay',data);
-        initPayment(data.data);
       } else if(isIndividualActive){
-        const orderUrl = "http://localhost:4001/api/payment/orders";
-        const { data } = await axios.post(orderUrl, { amount: bookingData.price });
-        console.log('Individual RRRazorpay',data);
-        initPayment(data.data);
+        
+        try {
+          const postData = await axios.post(`http://localhost:4001/booking/verify`, bookingData)
+          if(postData){
+            const orderUrl = "http://localhost:4001/api/payment/orders";
+            const { data } = await axios.post(orderUrl, { amount: bookingData.price });
+            console.log('Individual RRRazorpay',data);
+            initPayment(data.data);
+          }
+        } catch (error) {
+          console.log(error)
+          toast(`${error?.response?.data?.message}`, {
+            type:'error',
+            position:'bottom-right'
+        })
+        }
       }
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
+  const handleturfpark = ()=>{
+    setSelectedTurf('Turf-Park')
+    setBookingData(prevState => ({ ...prevState, turfName: 'Turf-Park' }));
+    setCorporateBooking(prevState => ({ ...prevState, turf: 'Turf-Park' }));
+    window.scrollBy(0, 300)
+  }
+
+  const handlePlay = ()=>{
+    setSelectedTurf('Play-Turf')
+    setBookingData(prevState => ({ ...prevState, turfName: 'Play-Turf' }));
+    setCorporateBooking(prevState => ({ ...prevState, turf: 'Play-Turf' }));
+    window.scrollBy(0, 300)
+  }
+
+  const handleFS = ()=>{
+    setSelectedTurf('FS-Turf')
+    setBookingData(prevState => ({ ...prevState, turfName: 'FS-Turf' }));
+    setCorporateBooking(prevState => ({ ...prevState, turf: 'FS-Turf' }));
+    window.scrollBy(0, 300)
+  }
+
+  const handleGreenfield = ()=>{
+    setSelectedTurf('Greenfield')
+    setBookingData(prevState => ({ ...prevState, turfName: 'Greenfield' }));
+    setCorporateBooking(prevState => ({ ...prevState, turf: 'Greenfield' }));
+    window.scrollBy(0, 300)
+  }
+console.log('bbbbbbbbbbbbbbbbbbb',bookingData)
+console.log('cccccccccccccc',corporateBooking)
   return (
-    <div style={{display:'flex', justifyContent:'center', margin:'3rem 7rem', flexDirection:'column', gap:'3rem'}}>
+    <div style={{margin:'3rem 7rem'}}>
       <ToastContainer/>
-      <div>
-        <h1 style={{color:'darkgreen', margin:'0'}}>St. Andrews TurfPark</h1>
+      <h1 style={{color:'darkgreen'}}>CHOOSE A GROUND</h1>
+      <div style={{display:'flex', alignItems:'center', justifyContent:'flex-start', gap:'2rem'}}>
+
+        {/* SELECT TURFS */}
+        <div style={{ cursor:'pointer', width:'350px'}} className='turfs' onClick={handleturfpark}>
+          <img src={turfPark} alt="playTurf" width='84%' style={{margin:'10px 0'}}/>
+          <div style={{margin:'10px'}}>
+            <h4 style={{color:'darkgray', margin:'0', paddingLeft:'5px'}}>Turf Park - St. Andrews - <span style={{color:'darkgreen'}}>By GoTurf </span></h4>
+            <p style={{display:'flex', alignItems:'center', margin:'7px 0', fontSize:'12px'}}><LocationOnIcon style={{fontSize:'16px'}}/> Bandra - Mumbai</p>
+          </div>
+        </div>
+
+        <div style={{ cursor:'pointer', width:'200px'}} className='turfs' onClick={handlePlay}>
+          <img src={playTurf} alt="playTurf" width='100%' style={{margin:'20px 20px'}}/>
+          <div style={{margin:'10px'}}>
+            <h4 style={{color:'darkgray', margin:'0', paddingLeft:'5px'}}>Play The Turf, Mahim - <span style={{color:'darkgreen'}}>By GoTurf </span></h4>
+            <p style={{display:'flex', alignItems:'center', margin:'7px 0', fontSize:'12px'}}><LocationOnIcon style={{fontSize:'16px'}}/> Mahim - Mumbai</p>
+          </div>
+        </div>
+
+        <div style={{ cursor:'pointer', width:'200px'}} className='turfs' onClick={handleFS}>
+          <img src={FSTurf} alt="playTurf" width='100%' style={{margin:'10px 40px'}}/>
+          <div style={{margin:'10px'}}>
+            <h4 style={{color:'darkgray', margin:'0', paddingLeft:'5px'}}>FS - Turf, Churchgate - <span style={{color:'darkgreen'}}>By GoTurf </span></h4>
+            <p style={{display:'flex', alignItems:'center', margin:'7px 0', fontSize:'12px'}}><LocationOnIcon style={{fontSize:'16px'}}/> Malad - Mumbai</p>
+          </div>
+        </div>
+
+        <div style={{ cursor:'pointer', width:'250px'}} className='turfs' onClick={handleGreenfield}>
+          <img src={greenField} alt="playTurf" width='100%' style={{margin:'10px 50px'}}/>
+          <div style={{margin:'10px'}}>
+            <h4 style={{color:'darkgray', margin:'0 35px', paddingLeft:'5px'}}>Greenfield Turf, Borivali - <span style={{color:'darkgreen'}}>By GoTurf </span></h4>
+            <p style={{display:'flex', alignItems:'center', margin:'7px 35px', fontSize:'12px'}}><LocationOnIcon style={{fontSize:'16px'}}/> Bandra - Mumbai</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Selected Turf */}
+      {selectedTurf === 'Play-Turf' && (
+        <div>
+        <h1 style={{color:'darkgreen', margin:'10px 0'}}>Play Turf</h1>
         <div style={{display:'flex', gap:'2rem'}}>
-          <div style={{width:'600px', height:'400px', background:'black'}}>
+          <div style={{width:'600px'}}>
             <img src={img} width="100%" height="100%" style={{objectFit:'cover'}}/>
           </div>
           <div style={{width:'300px', padding:'2rem 0'}}>
-            <p>St. Andrews School Ground, St Domnic Rd, Bandra West, Mumbai, Maharashtra 400050</p>
-            <Link to={'/sitemap'} style={{textDecoration:'none'}}>
+            <p>Keluskar Rd, Mahim West, Shivaji Park, Mumbai, Maharashtra 400028</p>
+            <Link to={'/ptmap'} style={{textDecoration:'none'}}>
             <p style={{display:'flex', alignItems:'center', fontSize:'15px', fontFamily:'sans-serif', opacity:'0.8', fontWeight:'100'}}>Map View&nbsp;<MyLocationIcon style={{color:'gray', fontSize:'16px'}}/></p>
             </Link>
             <p>Ammenities:</p>
@@ -312,9 +427,103 @@ const Book = () => {
           ))}
         </div>
       </div>
+      )}
+      
+      {selectedTurf === 'FS-Turf' && (
+        <div>
+        <h1 style={{color:'darkgreen', margin:'10px 0'}}>FS Turf</h1>
+        <div style={{display:'flex', gap:'2rem'}}>
+          <div style={{width:'600px'}}>
+            <img src={img} width="100%" height="100%" style={{objectFit:'cover'}}/>
+          </div>
+          <div style={{width:'300px', padding:'2rem 0'}}>
+            <p>2, Ramchandra Ln, Malad, Navy Colony, Kanchpada, Malad West, Mumbai, Maharashtra 400064</p>
+            <Link to={'/fsmap'} style={{textDecoration:'none'}}>
+            <p style={{display:'flex', alignItems:'center', fontSize:'15px', fontFamily:'sans-serif', opacity:'0.8', fontWeight:'100'}}>Map View&nbsp;<MyLocationIcon style={{color:'gray', fontSize:'16px'}}/></p>
+            </Link>
+            <p>Ammenities:</p>
+            <div style={{display:'flex',flexWrap:'wrap',gap:'10px'}}>
+            {
+            FsTurfamenities.map((ammitie)=>(
+              <div style={{backgroundColor:'lightgrey',width:'90px',height:'30px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'11px',fontWeight:'bold'}}><p>{ammitie}</p></div>
+                
+            ))
+            }</div>
+          <a href="#book"><button style={{padding:'15px 30px',margin:'10px 0' ,background:'orange',color:'white',border:'none',fontSize:'20px',fontWeight:'600'}}>BOOK NOW</button></a>
+          </div>
+        </div>
+        <div style={{display:'flex', gap:'1rem', margin:'0.5rem 0'}}>
+          {FsTurfimages?.map((pic) => (
+            <img src={pic} onClick={()=> setImg(pic)} width="100px" height="70px"/>
+          ))}
+        </div>
+      </div>
+      )}
+      
+      {selectedTurf === 'Greenfield' && (
+        <div>
+        <h1 style={{color:'darkgreen', margin:'10px 0'}}>Greenfield Turf</h1>
+        <div style={{display:'flex', gap:'2rem'}}>
+          <div style={{width:'600px'}}>
+            <img src={img} width="100%" height="100%" style={{objectFit:'cover'}}/>
+          </div>
+          <div style={{width:'300px', padding:'2rem 0'}}>
+            <p>Neville D'souza ground, KC Marg, opposite Hotel Rangsharda, Reclamation, Bandra West, Mumbai, Maharashtra 400050</p>
+            <Link to={'/greenmap'} style={{textDecoration:'none'}}>
+            <p style={{display:'flex', alignItems:'center', fontSize:'15px', fontFamily:'sans-serif', opacity:'0.8', fontWeight:'100'}}>Map View&nbsp;<MyLocationIcon style={{color:'gray', fontSize:'16px'}}/></p>
+            </Link>
+            <p>Ammenities:</p>
+            <div style={{display:'flex',flexWrap:'wrap',gap:'10px'}}>
+            {
+            GreenFiledamenities.map((ammitie)=>(
+              <div style={{backgroundColor:'lightgrey',width:'90px',height:'30px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'11px',fontWeight:'bold'}}><p>{ammitie}</p></div>
+                
+            ))
+            }</div>
+          <a href="#book"><button style={{padding:'15px 30px',margin:'10px 0' ,background:'orange',color:'white',border:'none',fontSize:'20px',fontWeight:'600'}}>BOOK NOW</button></a>
+          </div>
+        </div>
+        <div style={{display:'flex', gap:'1rem', margin:'0.5rem 0'}}>
+          {GreenFieldimages?.map((pic) => (
+            <img src={pic} onClick={()=> setImg(pic)} width="100px" height="70px"/>
+          ))}
+        </div>
+      </div>
+      )}
+      
+      {selectedTurf === 'Turf-Park' && (
+        <div>
+        <h1 style={{color:'darkgreen', margin:'10px 0'}}>Turf Park - St. Andrews</h1>
+        <div style={{display:'flex', gap:'2rem'}}>
+          <div style={{width:'600px'}}>
+            <img src={img} width="100%" height="100%" style={{objectFit:'cover'}}/>
+          </div>
+          <div style={{width:'300px', padding:'2rem 0'}}>
+            <p>St. Andrews School Ground, St Domnic Rd, Bandra West, Mumbai, Maharashtra 400050</p>
+            <Link to={'/sitemap'} style={{textDecoration:'none'}}>
+            <p style={{display:'flex', alignItems:'center', fontSize:'15px', fontFamily:'sans-serif', opacity:'0.8', fontWeight:'100'}}>Map View&nbsp;<MyLocationIcon style={{color:'gray', fontSize:'16px'}}/></p>
+            </Link>
+            <p>Ammenities:</p>
+            <div style={{display:'flex',flexWrap:'wrap',gap:'10px'}}>
+            {
+            Ptamenities.map((ammitie)=>(
+              <div style={{backgroundColor:'lightgrey',width:'90px',height:'30px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'11px',fontWeight:'bold'}}><p>{ammitie}</p></div>
+                
+            ))
+            }</div>
+          <a href="#book"><button style={{padding:'15px 30px',margin:'10px 0' ,background:'orange',color:'white',border:'none',fontSize:'20px',fontWeight:'600'}}>BOOK NOW</button></a>
+          </div>
+        </div>
+        <div style={{display:'flex', gap:'1rem', margin:'0.5rem 0'}}>
+          {Ptimages?.map((pic) => (
+            <img src={pic} onClick={()=> setImg(pic)} width="100px" height="70px"/>
+          ))}
+        </div>
+      </div>
+      )}
 
       {/* Select Booking Type */}
-      <div style={{width:'60%'}} id='book'>
+      <div style={{width:'60%', marginTop:'5rem'}} id='book'>
       {user ? (
         <>
         <h2 style={{color:'darkgreen', margin:'0'}}>Select booking Type:</h2>
@@ -323,7 +532,7 @@ const Book = () => {
           <button onClick={handleCorporate} style={{background: isCorprateActive ? 'orange': '', color: isCorprateActive ? 'white': '', padding:'10px', border:'none', borderRadius:'1px', fontSize:'17px', cursor:'poniter'}} className="type-btn">Corporate</button>
         </div>
         </>
-      ) : ('Please login')}
+      ) : (<h1 style={{color:'red',fontWeight:'900'}}>Please Login!!!</h1>)}
       
 
       {/* Individual */}
@@ -333,14 +542,15 @@ const Book = () => {
           <h3 style={{color:'darkgreen', margin:'0'}}>Add Booking Enquiry</h3>
           <hr style={{border:'1px solid gray', height:'0', borderTop:'none'}}/>
           <div style={{display:'flex', flexDirection:'column', gap:'20px', margin:'20px 0',}}>
-            <TextField variant='outlined' value={user?.name} label="Enquirer's Name" fullWidth/>
-            <TextField variant='outlined' value={user?.email} type='email' label='Email' name='email' fullWidth/>
-            <TextField variant='outlined' value={user?.phone} type='tel' label='+ 91' name='number' fullWidth/>
-            <TextField variant='outlined' onChange={handleChange} value={bookingData.players} type='number' inputProps={{ maxLength: 15 }} label='Players' name='players' fullWidth/>
-            <TextField variant='outlined' onChange={handleChange} name='address' value={bookingData.address} label='Your Address' fullWidth multiline rows={4}/>
+            <TextField variant='outlined' value={user?.name} label="Enquirer's Name" fullWidth required/>
+            <TextField variant='outlined' value={user?.email} type='email' label='Email' name='email' fullWidth required/>
+            <TextField variant='outlined' value={user?.number} type='tel' label='+ 91' name='number' fullWidth required/>
+            <TextField variant='outlined' onChange={handleChange} value={bookingData.players} type='number' inputProps={{ maxLength: 15 }} label='Players' name='players' fullWidth required/>
+            <TextField variant='outlined' onChange={handleChange} name='address' value={bookingData.address} label='Your Address' fullWidth multiline rows={4} required/>
             <TextField variant='outlined' onChange={handleChange} name='date' value={bookingData.date} type='date' placeholder='Date' fullWidth required inputProps={{
               min: new Date().toISOString().substr(0, 10),
             }}/>
+            <TextField variant='outlined' label="Your Turf" value={bookingData.turfName} name='turfName' fullWidth required/>
             <div style={{display:'flex', gap:'2rem'}}>
             <div style={{flex:'1'}}>
             <InputLabel id="time-slot-select-label">From</InputLabel>
@@ -370,9 +580,9 @@ const Book = () => {
             </Select>
             </div>
           </div>
-          <p>Your Booking Price{bookingData.price}</p>
+          <p style={{fontSize:'20px',letterSpacing:'1px'}}>Your Booking Price <span style={{fontWeight:'650'}}>₹{bookingData.price}</span> </p>
           <div>
-            <Button type='submit' variant='contained' color='primary'>Book</Button>&nbsp;
+            <Button type='submit' variant='contained' color='primary' style={{width:'150px',height:'50px',fontSize:'20px',fontWeight:'600'}}>Book</Button>&nbsp;
             
           </div>
         </form>
@@ -386,8 +596,8 @@ const Book = () => {
             <h3 style={{color:'darkgreen', margin:'0'}}>Add Booking Enquiry</h3>
             <hr style={{border:'1px solid gray', height:'0', borderTop:'none'}}/>
             <div style={{display:'flex', flexDirection:'column', gap:'20px', margin:'20px 0',}}>
-              <TextField variant='outlined' onChange={handleChangeCorprate} name='purpose' label='Purpose' fullWidth/>
-              <TextField variant='outlined' onChange={handleChangeCorprate} name='date' type='date' placeholder='Date' fullWidth required inputProps={{
+              <TextField variant='outlined' onChange={handleChangeCorprate} name='purpose' label='Purpose' fullWidth required/>
+              <TextField variant='outlined' onChange={handleChangeCorprate} name='date'  type='date' placeholder='Date' fullWidth required inputProps={{
                 min: new Date().toISOString().substr(0, 10),
               }}/>
               <div style={{display:'flex', gap:'2rem'}}>
@@ -409,11 +619,12 @@ const Book = () => {
               </Select>
               </div>
               </div>
-              <TextField variant='outlined' value={user?.name} label="Enquirer's Name" name='enquirer' fullWidth/>
-              <TextField variant='outlined' value={user?.email} type='email' label='Email' name='email' fullWidth/>
-              <TextField variant='outlined' value={user?.phone} type='tel' label='+ 91' name='number' fullWidth/>
-              <TextField variant='outlined' onChange={handleChangeCorprate} value={corporateBooking.company} label='Company name' name='company' fullWidth/>
-              <TextField variant='outlined' onChange={handleChangeCorprate} type='number' value={corporateBooking.players} inputProps={{ maxLength: 15 }} label='Players' name='players' fullWidth/>
+              <TextField variant='outlined' label="Your Turf" value={corporateBooking.turf} name='turf' fullWidth required/>
+              <TextField variant='outlined' value={user?.name} label="Enquirer's Name" name='enquirer' fullWidth required/>
+              <TextField variant='outlined' value={user?.email} type='email' label='Email' name='email' fullWidth required/>
+              <TextField variant='outlined' value={user?.number} type='tel' label='+ 91' name='number' fullWidth required/>
+              <TextField variant='outlined' onChange={handleChangeCorprate} value={corporateBooking.company} label='Company name' name='company' fullWidth required/>
+              <TextField variant='outlined' onChange={handleChangeCorprate} type='number' value={corporateBooking.players} inputProps={{ maxLength: 15 }} label='Players' name='players' fullWidth required/>
               <div>
               <InputLabel id="time-slot-select-label">Select Sports Type</InputLabel>
               <Select value={corporateBooking.sportsType} name='sportsType' onChange={handleChangeCorprate} labelId="time-slot-select-label" fullWidth>
@@ -423,9 +634,9 @@ const Book = () => {
               </Select>
               </div>
             </div>
-            <p>Your Booking Price{corporateBooking.price}</p>
+            <p style={{fontSize:'20px',letterSpacing:'1px'}}>Your Booking Price <span style={{fontWeight:'650'}}>₹{corporateBooking.price}</span> </p>
             <div>
-              <Button type='submit' variant='contained' color='primary'>Book</Button>&nbsp;
+            <Button type='submit' variant='contained' color='primary' style={{width:'150px',height:'50px',fontSize:'20px',fontWeight:'600'}}>Book</Button>&nbsp;
               
             </div>
           </form>

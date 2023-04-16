@@ -17,6 +17,9 @@ import SiteMap from './components/SiteMap';
 import Footer from './components/Footer';
 import Faq from './components/Faq';
 import Terms from './components/Term';
+import Fsmap from './components/Fsmap';
+import Pturf from './components/Pturf';
+import Green from './components/Green';
 
 function App() {
   return (
@@ -38,6 +41,9 @@ function App() {
         <Route path={`/sitemap`} exact component={SiteMap}/>
         <Route path={`/faq`} exact component={Faq}/>
         <Route path={`/terms`} exact component={Terms}/>
+        <Route path={`/fsmap`} exact component={Fsmap}/>
+        <Route path={`/ptmap`} exact component={Pturf}/>
+        <Route path={`/greenmap`} exact component={Green}/>
       </Switch>
       <Footer/>
     </div>

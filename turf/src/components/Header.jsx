@@ -1,12 +1,15 @@
 import React,{useEffect, useState} from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { Avatar, Button } from '@mui/material'
-import Logo from '../images/playspots.png'
+import Logo from '../images/GoTurf.png'
+import axios from 'axios'
 
 const Header = () => {
+  const  url = 'http://localhost:4001/profile'
   const location = useLocation()
   const history = useHistory()
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('userProfile')))
+  const [first, setfirst] = useState([])
   // console.log(user)
   
   const logout = ()=>{
@@ -15,6 +18,18 @@ const Header = () => {
     history.push('/registration')
     setUser(null)
   }
+
+  const getProfiles = async()=>{
+    const { data } = await axios.get(url)
+    setfirst(data)
+}
+
+useEffect(()=>{
+  getProfiles()
+},[])
+
+const userImage = first.filter(image => image.email === user?.email);
+console.log('uuuuusss',userImage)
 
   useEffect(()=>{
 
@@ -33,7 +48,7 @@ const Header = () => {
   return (
     <nav className='header'>
       <div style={{display:'flex', alignItems:'center', justifyContent:'space-around'}}>
-        <img src={Logo} alt={Logo} width='150px'/>
+       <Link to='/'> <img src={Logo} alt={Logo} width='150px'/></Link>
 
       <div className='links'>
         <ul>
@@ -60,12 +75,16 @@ const Header = () => {
         </ul>
        </div>
       </div>
-      <div style={{display:'flex', flexWrap:'wrap',paddingRight:'20px'}}>
+      <div style={{display:'flex', flexWrap:'wrap',paddingRight:'20px', alignItems:'center'}}>
         {user && (
           <div style={{display:'flex',flexWrap:'wrap'}}>
             <span style={{display:'flex', alignItems:'center', justifyContent:'center', textTransform:'capitalize', fontSize:'17px', fontWeight:'500', cursor:'pointer', gap:'10px', marginRight:'15px'}}>
               <Link to={`/dashboard`} style={{textDecoration:'none'}}> 
-              <Avatar>{user?.name[0]}</Avatar>
+              {user?.userImg ? (
+                <img src={user?.userImg} width='45px' height='45px' style={{borderRadius:'50%', objectFit:'cover'}} />
+              ) : (
+                <img src={userImage[0]?.userImg} width='45px' height='45px' style={{borderRadius:'50%', objectFit:'cover'}}/>
+              )}
               </Link>
 
             {user?.name}
@@ -73,11 +92,11 @@ const Header = () => {
           </div>
         )}
         {user ? (
-          <Button onClick={logout} variant='contained' color='error'>Logout</Button>
+          <Button onClick={logout} variant='contained' color='error' style={{height:'40px'}}>Logout</Button>
         ): (
           <>
           <Link to={'/registration'} style={{textDecoration:'none'}}>
-          <Button variant='contained' color='secondary'>Register</Button>
+          <Button variant='contained' color='secondary'>Sign-in</Button>
           </Link>
           &nbsp;&nbsp;&nbsp;
           <Link to={'/admin'} style={{textDecoration:'none'}}>

@@ -1,4 +1,3 @@
-
 import React from 'react'
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -10,8 +9,8 @@ const Faq = () => {
     <div style={{display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',padding:'5rem',color:'white'}} className='background'>
        
       
-<h1 style={{margin:'10px 0px',fontFamily:'sans-serif',fontWeight:'900',letterSpacing:'2px'}}>FAQs</h1>
-<p style={{margin:'0',fontFamily:'sans-serif',fontWeight:'600' ,margin:'20px'}}>Some questions that you might have in mind about GoTurf </p>
+<h1 style={{margin:'10px 0px',fontFamily:'sans-serif',fontWeight:'900',letterSpacing:'2px',fontSize:'5rem'}}>FAQs</h1>
+<p style={{margin:'0',fontFamily:'sans-serif',fontWeight:'700' ,letterSpacing:'1px',margin:'20px',fontSize:'2rem'}}>Some questions that you might have in mind about GoTurf </p>
 <Accordion className='accordian'>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -91,7 +90,7 @@ const Faq = () => {
           </AccordionSummary>
             <AccordionDetails>
               <p className='faq-ans'>
-                {'Yes you can easily cancel your booking if needed but there will be and your money will be refunded with added charges.'}
+                {'Yes you can easily cancel your booking if needed and your money will be refunded with added charges.'}
               </p>
             </AccordionDetails>
         </Accordion>

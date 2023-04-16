@@ -1,9 +1,9 @@
 import React from 'react'
-import logo from '../images/playspots.png'
+import logo from '../images/GoTurf.png'
 import pals from '../images/meet-pals.png'
-import profile from '../images/meet-pals.png'
-import tour from '../images/meet-pals.png'
-import cup from '../images/meet-pals.png'
+import profile from '../images/profile.png'
+import tour from '../images/tournament.png'
+import cup from '../images/tennis-player.png'
 const About = () => {
  
     return (
